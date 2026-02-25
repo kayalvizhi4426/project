@@ -160,6 +160,7 @@ import LabRegistrationForm from "./board/profile";
 import Booking from "./board/booking";
 import Equipment from "./board/equipments";   // ✅ FIXED HERE
 import Collaboration from "./board/collaboration";
+import Dashboard from "./board/dashboard";
 
 function App() {
   return (
@@ -170,7 +171,7 @@ function App() {
         <Route path="/" element={<LabDashboard />}>
 
           {/* Child Routes */}
-          <Route path="dashboard" element={<LabDashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="equipment" element={<Equipment />} />
           <Route path="collaboration" element={<Collaboration />} />
           <Route path="booking" element={<Booking />} />
