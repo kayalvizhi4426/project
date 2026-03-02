@@ -1,70 +1,3 @@
-# from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
-# from routes.clientRouter import clientRouter
-
-# app = FastAPI()
-
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-
-# @app.get("/")
-# def home():
-#     return {"message": "Backend is running"}
-
-# app.include_router(clientRouter)
-
-# @app.get("/profile")
-# def get_profile():
-#     return {
-#         "name": "Kayal",
-#         "role": "Lab Admin",
-#         "department": "Research Lab"
-#     }
-
-# from fastapi import FastAPI
-# from fastapi.middleware.cors import CORSMiddleware
-# from routes.clientRouter import clientRouter
-# from pydantic import BaseModel
-# from database import equipment_collection
-# from bson import ObjectId
-
-# app = FastAPI()
-
-# # CORS Settings
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
-
-# # ------------------------
-# # HOME ROUTE
-# # ------------------------
-# @app.get("/")
-# def home():
-#     return {"message": "Backend is running"}
-
-# # ------------------------
-# # PROFILE ROUTE
-# # ------------------------
-# @app.get("/profile")
-# def get_profile():
-#     return {
-#         "name": "Kayal",
-#         "role": "Lab Admin",
-#         "department": "Research Lab"
-#     }
-
-# # ------------------------
-# # INCLUDE EXISTING ROUTER
-# # ------------------------
-# app.include_router(clientRouter)
 
 # # ============================
 # # EQUIPMENT SECTION START
@@ -108,8 +41,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from routes.clientRouter import clientRouter
 from routes.equipmentRouter import equipmentRouter
 
-
-# ✅ NEW IMPORTS ADDED
 from database import db
 from pydantic import BaseModel
 from typing import List
@@ -129,11 +60,6 @@ def home():
 
 app.include_router(clientRouter)
 
-# ===================================================
-# 🔥 PROFILE SECTION (MongoDB Connected Version)
-# ===================================================
-
-# MongoDB Collection
 profile_collection = db["profile"]
 
 # Profile Schema
@@ -172,14 +98,9 @@ def get_profile():
     return {}
 app.include_router(equipmentRouter)
 
-# ================= CORS =================
-# app.add_middleware(
-#     CORSMiddleware,
-#     allow_origins=["*"],
-#     allow_credentials=True,
-#     allow_methods=["*"],
-#     allow_headers=["*"],
-# )
+
+
+
 
 # # ================= USER MODEL =================
 
@@ -208,17 +129,6 @@ app.include_router(equipmentRouter)
 #     facilities: List[str] = []
 
 
-# # ================= CLIENT MODEL =================
-
-# class Client(BaseModel):
-#     company: str
-#     contact: str
-#     email: str
-#     industry: str
-#     project: str
-#     startDate: str
-#     status: str
-
 
 # # ================= EQUIPMENT MODEL =================
 
@@ -226,19 +136,6 @@ app.include_router(equipmentRouter)
 #     image: str
 #     equipmentName: str
 #     equipmentCount: str
-
-
-# # ================= COLLECTIONS =================
-
-# clients_collection = database.db["clients"]
-# equipment_collection = database.db["equipment"]
-
-
-# # ================= HOME =================
-
-# @app.get("/")
-# def home():
-#     return {"message": "FastAPI + MongoDB API running 🚀"}
 
 
 # # ================= USERS APIs =================
@@ -272,66 +169,6 @@ app.include_router(equipmentRouter)
 #         "message": "Lab profile created successfully"
 #     }
 
-
-# # ================= CLIENT APIs =================
-
-# @app.get("/clients")
-# def get_clients():
-
-#     clients = []
-
-#     for c in clients_collection.find():
-#         clients.append({
-#             "_id": str(c["_id"]),
-#             "company": c["company"],
-#             "contact": c["contact"],
-#             "email": c["email"],
-#             "industry": c["industry"],
-#             "project": c["project"],
-#             "startDate": c["startDate"],
-#             "status": c["status"],
-#         })
-
-#     return clients
-
-
-# @app.post("/clients")
-# def create_client(client: Client):
-
-#     new_client = client.dict()
-#     result = clients_collection.insert_one(new_client)
-
-#     return {
-#         "_id": str(result.inserted_id),
-#         **new_client
-#     }
-
-
-# @app.put("/clients/{client_id}")
-# def update_client(client_id: str, client: Client):
-
-#     clients_collection.update_one(
-#         {"_id": ObjectId(client_id)},
-#         {"$set": client.dict()}
-#     )
-
-#     return {
-#         "status": "success",
-#         "message": "Client updated successfully"
-#     }
-
-
-# @app.delete("/clients/{client_id}")
-# def delete_client(client_id: str):
-
-#     clients_collection.delete_one(
-#         {"_id": ObjectId(client_id)}
-#     )
-
-#     return {
-#         "status": "success",
-#         "message": "Client deleted successfully"
-#     }
 
 
 # # ================= EQUIPMENT APIs =================
