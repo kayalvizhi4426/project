@@ -9,49 +9,62 @@ import {
   People, AttachMoney, BarChart
 } from '@mui/icons-material';
 
-const sidebarItems = [
-  { label: "Lab Booking", count: 8, color: "#FF9800", icon: <CalendarToday /> },
-  { label: "Equipment", count: 24, color: "#9C27B0", icon: <Devices /> },
-  { label: "Collaboration", count: 12, color: "#E91E63", icon: <Handshake /> },
-];
-
-const labStatus = [
-  { lab: "Chemistry Lab", status: "active", usage: 85, bookings: 3 },
-  { lab: "Biology Lab", status: "active", usage: 70, bookings: 2 },
-  { lab: "Physics Lab", status: "maintenance", usage: 40, bookings: 1 },
-  { lab: "Computer Lab", status: "active", usage: 95, bookings: 5 },
-];
-
-const recentActivities = [
-  { action: "New lab booking confirmed", time: "2 hours ago", icon: <CalendarToday /> },
-  { action: "Equipment maintenance completed", time: "5 hours ago", icon: <Devices /> },
-  { action: "Research paper published", time: "1 day ago", icon: <LibraryBooks /> },
-  { action: "New collaboration started", time: "2 days ago", icon: <Handshake /> },
-  { action: "Grant funding received", time: "3 days ago", icon: <AttachMoney /> },
-];
-
-const equipmentStatus = [
-  { name: "Microscope", status: "available", lastUsed: "Today" },
-  { name: "Centrifuge", status: "in-use", lastUsed: "Now" },
-  { name: "PCR Machine", status: "maintenance", lastUsed: "2 days ago" },
-  { name: "Spectrometer", status: "available", lastUsed: "Yesterday" },
-  { name: "Incubator", status: "available", lastUsed: "Today" },
-];
-
-const weeklyUsage = [
-  { day: "Mon", usage: 65 },
-  { day: "Tue", usage: 80 },
-  { day: "Wed", usage: 70 },
-  { day: "Thu", usage: 90 },
-  { day: "Fri", usage: 75 },
-  { day: "Sat", usage: 40 },
-  { day: "Sun", usage: 20 },
-];
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const Dashboard = () => {
+  const sidebarItems = [
+    { label: "Lab Booking", count: 8, color: "#FF9800", icon: <CalendarToday /> },
+    { label: "Equipment", count: 24, color: "#9C27B0", icon: <Devices /> },
+    { label: "Collaboration", count: 12, color: "#E91E63", icon: <Handshake /> },
+  ];
+
+  const labStatus = [
+    { lab: "Chemistry Lab", status: "active", usage: 85, bookings: 3 },
+    { lab: "Biology Lab", status: "active", usage: 70, bookings: 2 },
+    { lab: "Physics Lab", status: "maintenance", usage: 40, bookings: 1 },
+    { lab: "Computer Lab", status: "active", usage: 95, bookings: 5 },
+  ];
+
+  const recentActivities = [
+    { action: "New lab booking confirmed", time: "2 hours ago", icon: <CalendarToday /> },
+    { action: "Equipment maintenance completed", time: "5 hours ago", icon: <Devices /> },
+    { action: "Research paper published", time: "1 day ago", icon: <LibraryBooks /> },
+    { action: "New collaboration started", time: "2 days ago", icon: <Handshake /> },
+    { action: "Grant funding received", time: "3 days ago", icon: <AttachMoney /> },
+  ];
+
+  const equipmentStatus = [
+    { name: "Microscope", status: "available", lastUsed: "Today" },
+    { name: "Centrifuge", status: "in-use", lastUsed: "Now" },
+    { name: "PCR Machine", status: "maintenance", lastUsed: "2 days ago" },
+    { name: "Spectrometer", status: "available", lastUsed: "Yesterday" },
+    { name: "Incubator", status: "available", lastUsed: "Today" },
+  ];
+
+  const weeklyUsage = [
+    { day: "Mon", usage: 65 },
+    { day: "Tue", usage: 80 },
+    { day: "Wed", usage: 70 },
+    { day: "Thu", usage: 90 },
+    { day: "Fri", usage: 75 },
+    { day: "Sat", usage: 40 },
+    { day: "Sun", usage: 20 },
+  ];
+
+  // const [bookings, setBookings] = useState([]);
+
+  // useEffect(() => {
+  //   fetchBookings();
+  // }, []);
+
+  // const fetchBookings = async () => {
+  //   const res = await axios.get("http://127.0.0.1:8000/labbooking");
+  //   setBookings(res.data);
+  // }
 
   return (
-    <Box sx={{ p: 3, bgcolor: '#f5f7fa', minHeight: '100vh' }}>
+    <Box sx={{ p: 3, minHeight: '100vh'}}>
       <Box sx={{ mb: 4 }}>
         <Typography variant="h4" sx={{ color: '#2c3e50', fontWeight: 'bold', mb: 1 }}>
           Lab Dashboard
@@ -94,7 +107,7 @@ const Dashboard = () => {
 
       {/* Stats */}
       <Grid container spacing={3} justifyContent="center" sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{xs:12,md:3}}>
           <Paper sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
             <Science sx={{ fontSize: 40, color: '#3498db', mb: 2 }} />
             <Typography variant="h4" sx={{ color: '#2c3e50', fontWeight: 'bold' }}>5</Typography>
@@ -102,7 +115,7 @@ const Dashboard = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{xs:12,md:3}}>
           <Paper sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
             <People sx={{ fontSize: 40, color: '#2ecc71', mb: 2 }} />
             <Typography variant="h4" sx={{ color: '#2c3e50', fontWeight: 'bold' }}>42</Typography>
@@ -110,7 +123,7 @@ const Dashboard = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{xs:12,md:3}}>
           <Paper sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
             <BarChart sx={{ fontSize: 40, color: '#e74c3c', mb: 2 }} />
             <Typography variant="h4" sx={{ color: '#2c3e50', fontWeight: 'bold' }}>85%</Typography>
@@ -118,7 +131,7 @@ const Dashboard = () => {
           </Paper>
         </Grid>
 
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid size={{xs:12,md:3}}>
           <Paper sx={{ p: 3, textAlign: 'center', borderRadius: 2 }}>
             <TrendingUp sx={{ fontSize: 40, color: '#9b59b6', mb: 2 }} />
             <Typography variant="h4" sx={{ color: '#2c3e50', fontWeight: 'bold' }}>23</Typography>
@@ -130,7 +143,7 @@ const Dashboard = () => {
       <Grid container spacing={3} justifyContent="center">
 
         {/* Lab Status */}
-        <Grid item xs={12} md={6}>
+        <Grid item size={12} md={6}>
           <Paper sx={{ p: 3, borderRadius: 2, height: '100%' }}>
             <Typography variant="h6" sx={{ color: '#2c3e50', mb: 3, fontWeight: 'bold' }}>
               Lab Status & Usage
@@ -178,7 +191,7 @@ const Dashboard = () => {
         </Grid>
 
         {/* Recent Activities */}
-        <Grid item xs={12} md={6}>
+        <Grid item size={12} md={6}>
           <Paper sx={{ p: 3, borderRadius: 2, height: '100%' }}>
             <Typography variant="h6" sx={{ color: '#2c3e50', mb: 3, fontWeight: 'bold' }}>
               Recent Activities
@@ -216,14 +229,14 @@ const Dashboard = () => {
         </Grid>
 
         {/* Equipment Status */}
-        <Grid item xs={12} md={6}>
+        <Grid item size={12} md={6}>
           <Paper sx={{ p: 3, borderRadius: 2 }}>
             <Typography variant="h6" sx={{ color: '#2c3e50', mb: 3, fontWeight: 'bold' }}>
               Equipment Status
             </Typography>
             <Grid container spacing={2}>
               {equipmentStatus.map((equip, index) => (
-                <Grid item xs={12} sm={6} key={index}>
+                <Grid item size={12} sm={6} key={index}>
                   <Paper sx={{
                     p: 2,
                     border: '1px solid',
@@ -263,7 +276,7 @@ const Dashboard = () => {
         </Grid>
 
         {/* Weekly Usage */}
-        <Grid item xs={12} md={6}>
+        <Grid item size={12} md={6}>
           <Paper sx={{ p: 3, borderRadius: 2 }}>
             <Typography variant="h6" sx={{ color: '#2c3e50', mb: 3, fontWeight: 'bold' }}>
               Weekly Lab Usage
@@ -316,4 +329,22 @@ const Dashboard = () => {
   );
 };
 
+// return(
+
+// <div>
+
+// <h2>Lab Bookings</h2>
+
+// {bookings.map((b,index)=>(
+// <div key={index}>
+
+// <p>Lab : {b.labName}</p>
+// <p>Name : {b.name}</p>
+// <p>Time : {b.time}</p>
+
+// </div>
+// ))}
+
+// </div>
+// )
 export default Dashboard;

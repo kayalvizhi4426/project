@@ -1,4 +1,3 @@
-
 import {
   Box,
   Drawer,
@@ -23,66 +22,49 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import EventAvailableIcon from "@mui/icons-material/EventAvailable";
 
 import { Outlet, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const drawerWidth = 240;
-
-/* ✅ DARK GREEN COLOR */
-const themeColor = "#14532d";   // Dark Green
+const themeColor = "#14532d";
 
 function LabDashboard() {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(true);
+
+  const handleToggle = () => {
+    setOpen((prev) => !prev);
+  };
 
   const menuItems = [
-    { text: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
+    { text: "Dashboard Overview", icon: <DashboardIcon />, path: "/dashboard" },
+    { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
     { text: "Equipment", icon: <BuildIcon />, path: "/equipment" },
     { text: "Collaboration", icon: <GroupIcon />, path: "/collaboration" },
     { text: "Lab Booking", icon: <EventAvailableIcon />, path: "/booking" },
-    { text: "Profile", icon: <AccountCircleIcon />, path: "/profile" },
   ];
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", height: "100vh", overflow: "hidden" }}>
       <CssBaseline />
-
-      {/* ✅ APP BAR */}
-      <AppBar
-        position="fixed"
-        sx={{
-          width: `calc(100% - ${drawerWidth}px)`,
-          ml: `${drawerWidth}px`,
-          backgroundColor: themeColor,
-          color: "white",
-        }}
-      >
-        <Toolbar>
-          <IconButton sx={{ color: "white" }}>
-            <MenuIcon />
-          </IconButton>
-
-          <Typography
-            variant="h6"
-            sx={{
-              ml: 2,
-              fontWeight: "bold",
-              color: "white",
-            }}
-          >
-            LABS Dashboard
-          </Typography>
-        </Toolbar>
-      </AppBar>
 
       {/* ✅ SIDEBAR */}
       <Drawer
-        variant="permanent"
+        variant="persistent"
+        anchor="left"
+        open={open}
         sx={{
-          width: drawerWidth,
+          width: open ? drawerWidth : 0,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: {
+          "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
             backgroundColor: themeColor,
             color: "white",
+            transform: open ? "translateX(0)" : `translateX(-${drawerWidth}px)`,
+            transition: "transform 0.3s ease",
+            position: "relative",
+            height: "100vh",
+            overflow: "auto",
           },
         }}
       >
@@ -95,30 +77,62 @@ function LabDashboard() {
               <ListItemButton
                 onClick={() => navigate(item.path)}
                 sx={{
-                  "&:hover": { backgroundColor: "#166534" }, // Slight lighter dark green hover
+                  "&:hover": { backgroundColor: "#166534" },
                 }}
               >
                 <ListItemIcon sx={{ color: "white" }}>
                   {item.icon}
                 </ListItemIcon>
-                <ListItemText primary={item.text} />
+                {open && <ListItemText primary={item.text} />}
               </ListItemButton>
             </ListItem>
           ))}
         </List>
       </Drawer>
 
-      {/* ✅ PAGE CONTENT */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: `calc(100% - ${drawerWidth}px)`,
+      {/* ✅ MAIN AREA */}
+      <Box 
+        sx={{ 
+          flexGrow: 1, 
+          display: "flex", 
+          flexDirection: "column",
+          height: "100vh",
+          overflow: "hidden",
         }}
       >
-        <Toolbar />
-        <Outlet />
+        {/* APP BAR */}
+        <AppBar
+          position="static"
+          sx={{
+            backgroundColor: themeColor,
+            transition: "all 0.3s ease",
+            flexShrink: 0,
+          }}
+        >
+          <Toolbar>
+            <IconButton color="inherit" onClick={handleToggle}>
+              <MenuIcon />
+            </IconButton>
+
+            <Typography variant="h6" sx={{ ml: 2, fontWeight: "bold" }}>
+              LABS Dashboard
+            </Typography>
+          </Toolbar>
+        </AppBar>
+
+        {/* PAGE CONTENT - SCROLLABLE ONLY HERE */}
+        <Box
+          component="main"
+          sx={{
+            p: 3,
+            bgcolor: "#f5f7fa",
+            flexGrow: 1,
+            overflow: "auto",
+            height: "100%",
+          }}
+        >
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );

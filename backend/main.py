@@ -1,68 +1,132 @@
+# from fastapi import FastAPI
+# from fastapi.middleware.cors import CORSMiddleware
+# from routes.clientRouter import clientRouter
+# from routes.equipmentRouter import equipmentRouter
 
-# # ============================
-# # EQUIPMENT SECTION START
-# # ============================
+# from database import db
+# from pydantic import BaseModel
+# from typing import List
+# from pymongo import MongoClient
 
-# # Equipment Schema
+# app = FastAPI()
+
+# MONGO_URL = "mongodb+srv://23cs040_db_user:jNlP2VP5VMr06ZTF@cluster0.cimp7f8.mongodb.net/labdb"
+
+# client = MongoClient(MONGO_URL)
+
+# db = client["projectdb"]   # database name
+# equipment_collection = db["equipment"]
+
 # class Equipment(BaseModel):
 #     name: str
 #     type: str
-#     quantity: int
-#     lab: str
-#     condition: str
+#     price: float
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+# @app.get("/")
+# def home():
+#     return {"message": "Backend is running"}
+
+# app.include_router(clientRouter)
+
+# profile_collection = db["profile"]
+
+# # Profile Schema
+# class Profile(BaseModel):
+#     lab_name: str
+#     lab_type: str
+#     department: str
+#     contact_person: str
+#     email: str
+#     mobile: str
+#     country: str
+#     state: str
+#     city: str 
+#     area: str
+#     pincode: str
+#     systems: str
+#     internet: str
+#     facilities: List[str]
 
 
-# # POST - Add Equipment
-# @app.post("/equipment")
+# # ✅ SAVE PROFILE (POST)
+# @app.post("/profile")
+# def save_profile(profile: Profile):
+#     data = profile.model_dump() 
+#     result= profile_collection.insert_one(data)
+#     return {"success":True,"message": "Profile Saved Successfully","id":str(result.inserted_id)}
+
+
+# # ✅ GET PROFILE (GET)
+# @app.get("/profile")
+# def get_profile():
+#     data = profile_collection.find_one()
+#     if data:
+#         data["_id"] = str(data["_id"])
+#         return data
+#     return {}
+# app.include_router(equipmentRouter)@app.post("/equipment")
 # def add_equipment(equipment: Equipment):
-#     data = equipment.dict()
+#     data = equipment.model_dump()
 #     result = equipment_collection.insert_one(data)
 #     return {
-#         "message": "Equipment added successfully",
+#         "success": True,
+#         "message": "Equipment Added",
 #         "id": str(result.inserted_id)
 #     }
-
-
-# # GET - Get All Equipment
-# @app.get("/equipment")
-# def get_equipment():
-#     equipments = []
-#     for item in equipment_collection.find():
-#         item["_id"] = str(item["_id"])
-#         equipments.append(item)
-#     return equipments
-
-# # ============================
-# # EQUIPMENT SECTION END
-# # ============================
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routes.clientRouter import clientRouter
 from routes.equipmentRouter import equipmentRouter
-
-from database import db
+from database import equipment_collection
+from routes.labbookingRouter import router as labbooking_router
 from pydantic import BaseModel
 from typing import List
+from pymongo import MongoClient
 
 app = FastAPI()
 
+# ✅ MongoDB Atlas Connection
+MONGO_URL = "mongodb+srv://Kayalvizhi:<db_password>@lab.2n0vszp.mongodb.net/?appName=Lab"
+
+client = MongoClient(MONGO_URL)
+
+db = client["labdb"]
+
+equipment_collection = db["equipment"]
+profile_collection = db["profile"]
+
+# ✅ CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
+# ✅ Home API
 @app.get("/")
 def home():
     return {"message": "Backend is running"}
 
+# ✅ Routers
 app.include_router(clientRouter)
+app.include_router(equipmentRouter)
+app.include_router(labbooking_router)
 
-profile_collection = db["profile"]
 
-# Profile Schema
+# ===============================
+# PROFILE MODEL
+# ===============================
+
 class Profile(BaseModel):
     lab_name: str
     lab_type: str
@@ -80,125 +144,78 @@ class Profile(BaseModel):
     facilities: List[str]
 
 
-# ✅ SAVE PROFILE (POST)
+# ✅ SAVE PROFILE
 @app.post("/profile")
 def save_profile(profile: Profile):
-    data = profile.model_dump() 
-    result= profile_collection.insert_one(data)
-    return {"success":True,"message": "Profile Saved Successfully","id":str(result.inserted_id)}
+    data = profile.model_dump()
+    result = profile_collection.insert_one(data)
+
+    return {
+        "success": True,
+        "message": "Profile Saved Successfully",
+        "id": str(result.inserted_id)
+    }
 
 
-# ✅ GET PROFILE (GET)
+# ✅ GET PROFILE
 @app.get("/profile")
 def get_profile():
     data = profile_collection.find_one()
+
     if data:
         data["_id"] = str(data["_id"])
         return data
+
     return {}
-app.include_router(equipmentRouter)
 
 
+# ===============================
+# EQUIPMENT MODEL
+# ===============================
+
+class Equipment(BaseModel):
+    name: str
+    type: str
+    price: float
 
 
+# ✅ ADD EQUIPMENT
+@app.post("/equipment")
+def add_equipment(equipment: Equipment):
 
-# # ================= USER MODEL =================
+    data = equipment.model_dump()
 
-# class User(BaseModel):
-#     name: str
-#     email: str
-#     password: str
+    result = equipment_collection.insert_one(data)
 
-
-# # ================= PROFILE MODEL =================
-
-# class Profile(BaseModel):
-#     lab_name: str
-#     lab_type: str
-#     department: str
-#     contact_person: str
-#     email: str
-#     mobile: str
-#     country: str
-#     state: str
-#     city: str
-#     area: str = ""
-#     pincode: str = ""
-#     systems: str = ""
-#     internet: str = ""
-#     facilities: List[str] = []
+    return {
+        "success": True,
+        "message": "Equipment Added",
+        "id": str(result.inserted_id)
+    }
 
 
-
-# # ================= EQUIPMENT MODEL =================
-
-# class Equipment(BaseModel):
-#     image: str
-#     equipmentName: str
-#     equipmentCount: str
-
-
-# # ================= USERS APIs =================
-
-# @app.get("/users")
-# def get_users():
-#     return list(database.users_collection.find({}, {"_id": 0}))
-
-
-# @app.post("/users")
-# def create_user(user: User):
-#     database.users_collection.insert_one(user.dict())
-#     return {
-#         "status": "success",
-#         "message": "User added successfully"
-#     }
-
-
-# # ================= PROFILES APIs =================
-
-# @app.get("/profiles")
-# def get_profiles():
-#     return list(database.profile_collection.find({}, {"_id": 0}))
-
-
-# @app.post("/profiles")
-# def create_profile(profile: Profile):
-#     database.profile_collection.insert_one(profile.dict())
-#     return {
-#         "status": "success",
-#         "message": "Lab profile created successfully"
-#     }
-
-
-
-# # ================= EQUIPMENT APIs =================
-
-# # -------- GET EQUIPMENT --------
+# ✅ GET EQUIPMENT
 # @app.get("/equipment")
 # def get_equipment():
 
-#     equipment_list = []
+#     data = list(equipment_collection.find())
 
-#     for e in equipment_collection.find():
-#         equipment_list.append({
-#             "_id": str(e["_id"]),
-#             "image": e["image"],
-#             "equipmentName": e["equipmentName"],
-#             "equipmentCount": e["equipmentCount"],
-#         })
+#     for item in data:
+#         item["_id"] = str(item["_id"])
 
-#     return equipment_list
+#     return data
+@app.get("/equipment")
+def get_equipment():
 
+    equipments = []
 
-# # -------- ADD EQUIPMENT --------
-# @app.post("/equipment")
-# def add_equipment(item: Equipment):
+    for eq in equipment_collection.find():
+        eq["_id"] = str(eq["_id"])
+        equipments.append(eq)
 
-#     new_item = item.dict()
-#     result = equipment_collection.insert_one(new_item)
+    return equipments
 
-#     return {
-#         "_id": str(result.inserted_id),
-#         **new_item
-#     }
+from fastapi.responses import FileResponse
 
+@app.get("/favicon.ico")
+async def favicon():     return FileResponse("favicon.ico") 

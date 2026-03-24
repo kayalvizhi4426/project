@@ -53,3 +53,23 @@ async def delete_client(client_id:str):
         return {"success":True,"message":"Client deleted succesfully"}
     except Exception as e:
         raise HTTPException(status_code=500,detail=f"{e}")
+
+@clientRouter.get("/clients")
+def get_clients():
+    clients = list(client_collection.find())
+
+    for client in clients:
+        client["_id"] = str(client["_id"])
+
+    return clients
+
+
+# ADD CLIENT
+@clientRouter.post("/clients")
+def add_client(data: dict):
+    result = client_collection.insert_one(data)
+
+    return {
+        "message": "Client added successfully",
+        "id": str(result.inserted_id)
+    }

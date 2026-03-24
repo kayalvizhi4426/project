@@ -14,3 +14,4 @@ def add_equipment(data: dict):
 def get_equipment():
     equipments = list(equipment_collection.find({}, {"_id": 0}))
     return equipments
+

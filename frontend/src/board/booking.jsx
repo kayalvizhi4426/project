@@ -195,7 +195,7 @@ const upcomingSlots = [
 /* ------------------ COMPONENT ------------------ */
 export default function Booking() {
   return (
-    <Box sx={{ minHeight: "100vh", background: COLORS.light, p: 2 }}>
+    <Box sx={{ minHeight: "100vh", p: 2 }}>
 
       {/* 🌱 HEADER */}
       <Box
@@ -306,8 +306,8 @@ export default function Booking() {
         Availability Calendar
       </Typography>
       <Grid container spacing={3} mb={4}>
-        <Grid item xs={12} md={6}>
-          <Card sx={{ borderRadius: 4,width: 420,
+        <Grid size={{xs:12,md:6}}>
+          <Card sx={{ borderRadius: 4,
             height: 475}}>
             <CardContent>
               <Typography fontWeight="bold" mb={2}>
@@ -339,10 +339,10 @@ export default function Booking() {
           </Card>
         </Grid>
       
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12,md:6}}>
           <Stack spacing={3}>
 
-            <Card sx={{ borderRadius: 4,width: 450,
+            <Card sx={{ borderRadius: 4,
             height: 475}}>
               <CardContent
                 sx={{
@@ -378,9 +378,9 @@ export default function Booking() {
             </Card>
           </Stack>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12,md:6}}>
           <Stack spacing={3}>
-            <Card sx={{ borderRadius: 4,width: 450,
+            <Card sx={{ borderRadius: 4,
             height: 475 }}>
               <CardContent
                 sx={{
@@ -431,7 +431,7 @@ export default function Booking() {
       <Grid container spacing={3} mb={4}>
 
         {/* 🟢 Availability Distribution */}
-        <Grid item xs={12} md={6}>
+        <Grid size={{xs:12,md:6}}>
           <Card sx={{
             borderRadius: 4,
             transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -439,7 +439,6 @@ export default function Booking() {
               transform: "translateY(-6px)",
               boxShadow: "0 12px 30px rgba(0,0,0,0.15)"
             },
-            width: 450,
             height: 400,
             display: "flex",
             flexDirection: "column",
@@ -459,7 +458,7 @@ export default function Booking() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{xs:12,md:6}}>
           <Card sx={{
             borderRadius: 4,
             transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -467,7 +466,6 @@ export default function Booking() {
               transform: "translateY(-6px)",
               boxShadow: "0 12px 30px rgba(0,0,0,0.15)"
             },
-            width: 400,
             height: 400,
             display: "flex",
             flexDirection: "column",
@@ -497,7 +495,7 @@ export default function Booking() {
           </Card>
         </Grid>
 
-        <Grid item xs={12} md={3}>
+        <Grid size={{xs:12,md:6}}>
           <Card sx={{
             borderRadius: 4,
             transition: "transform 0.3s ease, box-shadow 0.3s ease",
@@ -505,7 +503,6 @@ export default function Booking() {
               transform: "translateY(-6px)",
               boxShadow: "0 12px 30px rgba(0,0,0,0.15)"
             },
-            width: 450,
             height: 400,
             display: "flex",
             flexDirection: "column",

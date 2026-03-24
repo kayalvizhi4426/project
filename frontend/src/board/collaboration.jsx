@@ -177,7 +177,7 @@ export default function MyClients() {
             v: clients.filter((c) => c.status === "Active").length,
             s: "Ongoing projects",
           },
-          {
+          { 
             t: "Industries",
             v: new Set(clients.map((c) => c.industry)).size,
             s: "Different sectors",
